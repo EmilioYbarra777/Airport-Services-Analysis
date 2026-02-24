@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+data.cql
+app.log
+.env

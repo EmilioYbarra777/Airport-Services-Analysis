@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=airport-cluster
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  mongodb-fnb:
+    image: mongo:latest
+    container_name: mongodb-fnb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=iteso
+    volumes:
+      - mongodb-fnb-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cassandra-data:
+  mongodb-fnb-data:

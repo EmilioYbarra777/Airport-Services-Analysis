@@ -1,0 +1,22 @@
+# Virtual environments
+venv/
+*/venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Data files
+*.cql
+*.csv
+data/car_rental/
+data/food_beverage/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
