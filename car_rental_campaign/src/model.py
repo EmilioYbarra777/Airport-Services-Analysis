@@ -1,120 +1,38 @@
 #!/usr/bin/env python3
 import logging
-from datetime import datetime
 import calendar
 
-# Set logger
 log = logging.getLogger()
-
-
-CREATE_KEYSPACE = """
-        CREATE KEYSPACE IF NOT EXISTS {}
-        WITH replication = {{ 'class': 'SimpleStrategy', 'replication_factor': {} }}
-"""
-
-
-
-
-CREATE_AIRPORT_FLIGHTS = """
-    CREATE TABLE IF NOT EXISTS airport_flights(
-        origin_airport TEXT,
-        destination_airport TEXT,
-        year INT,
-        month INT,
-        day INT,
-        airline TEXT,
-        reason TEXT,
-        stay TEXT,
-        transit TEXT,
-        connection TEXT,
-        wait INT,
-        age INT,
-        gender TEXT,
-        PRIMARY KEY((destination_airport), month, transit, airline, year, day )
-    )
-
-
-"""
-
-CREATE_AIRPORT_FLIGHTS_TRANSIT = """
-    CREATE TABLE IF NOT EXISTS airport_flights_transit(
-        origin_airport TEXT,
-        destination_airport TEXT,
-        year INT,
-        month INT,
-        day INT,
-        airline TEXT,
-        reason TEXT,
-        stay TEXT,
-        transit TEXT,
-        connection TEXT,
-        wait INT,
-        age INT,
-        gender TEXT,
-        PRIMARY KEY((destination_airport), transit, month, airline, year, day )
-    )
-
-
-"""
-
-
 
 
 SELECT_AIRPORT_FLIGHTS = """
     SELECT origin_airport, destination_airport, year, month, day, airline, reason, stay, transit, connection, wait, age, gender  
     FROM airport_flights
-
-
 """
-
 
 SELECT_AIRPORT_TOTAL_FLIGHTS = """
     SELECT destination_airport, COUNT(*) 
     FROM airport_flights 
     GROUP BY destination_airport;
-
 """
-
-
 
 SELECT_AIRPORT_FLIGHTS_BY_MONTH_TRANSIT = """
     SELECT destination_airport, month, transit, COUNT(*) 
     FROM airport_flights where destination_airport = ? 
     GROUP BY destination_airport, month, transit;
-
 """
-
 
 SELECT_AIRPORT_FLIGHTS_BY_MONTH = """
     SELECT destination_airport, month, COUNT(*) 
     FROM airport_flights 
     GROUP BY destination_airport, month;
-
 """
-
 
 SELECT_CAR_RENTAL_BY_AIRPORT = """
     SELECT destination_airport, month, COUNT(*) 
     FROM airport_flights_transit WHERE transit = 'Car rental' 
     GROUP BY destination_airport, month ALLOW FILTERING;
-
 """
-
-
-
-
-
-def create_keyspace(session, keyspace, replication_factor):
-    log.info(f"Creating keyspace: {keyspace} with replication factor {replication_factor}")
-    session.execute(CREATE_KEYSPACE.format(keyspace, replication_factor))
-
-
-def create_schema(session):
-    log.info("Creating model schema")
-    session.execute(CREATE_AIRPORT_FLIGHTS)
-    session.execute(CREATE_AIRPORT_FLIGHTS_TRANSIT)
-  
-
 
 
 def get_airport_flights(session):
@@ -150,8 +68,6 @@ def get_airport_total_flights(session):
         print(f"- Count: {row.count}")
 
     print("\n")
-
-
 
 
 def get_airport_flights_by_month_transit(session, airport):
@@ -219,7 +135,6 @@ def get_airport_flights_by_month_transit(session, airport):
     print("\n")
 
 
-
 def get_airport_flights_by_month(session):
     log.info(f"Retrieving all airport flights by month")
     stmt = session.prepare(SELECT_AIRPORT_FLIGHTS_BY_MONTH)
@@ -270,6 +185,3 @@ def get_car_rental_by_airport(session):
 
 def month_to_string(month):
     return calendar.month_name[month]
-
-
-

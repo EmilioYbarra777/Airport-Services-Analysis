@@ -29,9 +29,9 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Run Car Rental App briefly for Tables and Keyspace creation
+### 4. Initialize Cassandra Schema
 ```bash
-python3 src/app.py  # Windows: python src\app.py
+python3 src/schema.py  # Windows: python src\schema.py
 ```
 
 ### 5. Load Data into Cassandra (root level)
@@ -39,7 +39,6 @@ python3 src/app.py  # Windows: python src\app.py
 docker cp data/car_rental/data.cql cassandra:/data.cql
 docker exec cassandra cqlsh -k flights -f /data.cql
 ```
-
 
 ### 6. Run Car Rental App
 ```bash
@@ -58,7 +57,7 @@ cd food_beverage_service
 python3 -m venv venv  # Windows: python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python3 src/populate_fast.py  # Windows: python src\populate_fast.py
+python3 src/populate_bulk.py  # Windows: python src\populate_fast.py
 ```
 
 ### 2. Run Service

@@ -6,6 +6,7 @@ import random
 from dotenv import load_dotenv
 from cassandra.cluster import Cluster
 
+import schema
 import model
 
 load_dotenv()
@@ -44,10 +45,10 @@ def main():
     cluster = Cluster(CLUSTER_IPS.split(','))
     session = cluster.connect()
 
-    model.create_keyspace(session, KEYSPACE, REPLICATION_FACTOR)
+    schema.create_keyspace(session, KEYSPACE, REPLICATION_FACTOR)
     session.set_keyspace(KEYSPACE)
 
-    model.create_schema(session)
+    schema.create_schema(session)
 
 
     while(True):
